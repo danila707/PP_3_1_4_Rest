@@ -72,7 +72,7 @@ public class AdminRestController {
         }
         userDTO.setRoles(roles);
 
-        userService.save(convetedToUser(userDTO));
+        userService.register(convetedToUser(userDTO));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

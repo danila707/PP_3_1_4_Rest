@@ -22,11 +22,6 @@ public class UserServiceImp implements UserService {
       this.userRepository = userRepository;
    }
 
-   @Transactional
-   @Override
-   public void save(User user) {
-      this.register(user);
-   }
 
    @Transactional(readOnly = true)
    @Override

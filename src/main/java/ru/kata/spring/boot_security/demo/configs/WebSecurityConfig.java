@@ -23,6 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.userDetailService = userDetailService;
     }
 
+    @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailService)
                 .passwordEncoder(getPasswordEncoder());
@@ -37,7 +38,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
+                // Доступ к публичным страницам
                 .antMatchers("/", "/index", "/logout").permitAll()
+                // Доступ к REST-контроллерам для администраторов
+                .antMatchers("/api/admin/**").hasRole("ADMIN")
+                // Доступ к REST-контроллерам для пользователей
+                .antMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+                // Доступ к другим страницам
                 .antMatchers("/adminpanel/**", "/header").hasRole("ADMIN")
                 .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
